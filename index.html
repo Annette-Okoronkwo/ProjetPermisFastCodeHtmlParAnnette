@@ -28,7 +28,7 @@
             font-family: 'Outfit', sans-serif;
             background-color: var(--bg-dark);
             color: var(--text-light);
-            /* FIX iPHONE : Bloque le fond de manière absolue */
+            /* Ancrage fixe pour éviter les rebonds sur iPhone */
             position: fixed;
             inset: 0; 
             overflow: hidden; 
@@ -91,7 +91,6 @@
             justify-content: center;
             align-items: flex-start;
             opacity: 0;
-            /* Animation 3D de base pour ordinateurs */
             transform: translateY(50px) scale(0.95) rotateX(5deg); 
             transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
             pointer-events: none;
@@ -169,7 +168,6 @@
         .tiktok-glitch { font-size: 3.5rem; font-weight: 900; color: #fff; letter-spacing: -1px; margin: 1.5rem 0; text-shadow: 3px 0px 0px var(--primary), -3px 0px 0px var(--tiktok-red); animation: glitchEffect 3s infinite; }
         @keyframes glitchEffect { 0%, 100% { text-shadow: 3px 0 0 var(--primary), -3px 0 0 var(--tiktok-red); } 48% { text-shadow: 3px 0 0 var(--primary), -3px 0 0 var(--tiktok-red); } 50% { text-shadow: -3px 0 0 var(--primary), 3px 0 0 var(--tiktok-red); transform: translateX(2px); } 52% { text-shadow: 3px 0 0 var(--primary), -3px 0 0 var(--tiktok-red); transform: translateX(0); } }
 
-        /* Nouvelles classes pour la slide 6 (Remplacement des styles en ligne) */
         .action-text { font-size: 1.3rem; line-height: 1.6; color: #e2e8f0; margin-bottom: 1.5rem; }
         .quote-box { background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
         .quote-box p { font-size: 1.25rem; margin: 0; color: #fff; line-height: 1.5; }
@@ -188,7 +186,7 @@
         .slide-counter span { color: var(--primary); }
 
         /* =========================================
-           LE FIX ULTIME IPHONE (SCROLL & TAILLES)
+           LE FIX ANTI-BUG SAFARI IPHONE
            ========================================= */
         @media screen and (max-width: 850px) {
             
@@ -196,30 +194,36 @@
             .grid-bg { animation: none !important; opacity: 0.15; }
             
             .slide {
-                /* On prend tout l'espace de l'écran avec inset: 0 */
-                top: 0; left: 0; right: 0; bottom: 0;
                 width: 100%; 
-                height: auto; 
+                height: 100dvh !important;
                 
-                /* Sécurité anti-bug 3D iOS : on retire rotateX et translateZ */
-                transform: translateY(30px); 
-                transition: opacity 0.4s ease, transform 0.4s ease;
+                /* FIX 1 : On désactive le Flexbox pour contourner le bug iOS */
+                display: block !important; 
+                
+                /* FIX 2 : On simplifie l'animation pour éviter le blocage de scroll */
+                transform: translateY(20px) !important; 
+                transition: opacity 0.4s ease, transform 0.4s ease !important;
                 
                 overflow-x: hidden !important; 
                 overflow-y: auto !important; 
-                -webkit-overflow-scrolling: touch; 
+                -webkit-overflow-scrolling: touch !important; 
                 
-                padding: 4.5rem 1.2rem calc(120px + env(safe-area-inset-bottom, 20px)) 1.2rem;
-                justify-content: flex-start;
+                /* FIX 3 : On met l'espace en HAUT, mais on laisse 0 en BAS car iOS l'ignore de toute façon */
+                padding: 5rem 1.2rem 0 1.2rem !important;
             }
 
             .slide.active {
-                /* Activation pure 2D */
                 transform: translateY(0) !important; 
+                opacity: 1 !important;
             }
 
-            /* On s'assure que les enfants ne s'écrasent pas */
-            .slide > * { flex-shrink: 0; }
+            /* FIX 4 LE BLOC FANTÔME : Ce faux élément oblige le téléphone à créer de l'espace tout en bas de la page */
+            .slide::after {
+                content: '';
+                display: block;
+                height: calc(160px + env(safe-area-inset-bottom, 20px));
+                width: 100%;
+            }
             
             .slide::-webkit-scrollbar { display: none; }
             
@@ -227,14 +231,13 @@
                 backdrop-filter: blur(5px) !important; 
                 -webkit-backdrop-filter: blur(5px) !important;
                 background: rgba(15, 23, 42, 0.8) !important; 
-                padding: 1.2rem !important; /* Padding très réduit pour l'espace */
+                padding: 1.2rem !important; 
                 border-radius: 16px;
                 width: 100%; 
                 overflow-wrap: break-word; 
                 word-wrap: break-word;
             }
 
-            /* Réduction des éléments de la dernière slide pour tout faire rentrer */
             .action-text { font-size: 1rem !important; margin-bottom: 1rem; }
             .quote-box { padding: 1rem !important; }
             .quote-box p { font-size: 0.95rem !important; }
@@ -406,7 +409,6 @@
                 slide.classList.remove('active');
                 if (i === index) {
                     slide.classList.add('active');
-                    // On remet le scroll en haut au changement de slide
                     if (window.innerWidth <= 850) {
                         slide.scrollTo({ top: 0, behavior: 'instant' });
                     }
