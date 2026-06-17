@@ -32,7 +32,7 @@
         .grid-bg {
             position: absolute;
             top: 0; left: 0; width: 100vw; 
-            height: 100vh; /* Fallback pour les vieux navigateurs */
+            height: 100vh; /* Fallback */
             height: 100dvh; /* S'adapte à la barre d'URL mobile */
             background-image: 
                 linear-gradient(var(--glass-border) 1px, transparent 1px),
@@ -57,6 +57,7 @@
             filter: blur(100px);
             z-index: -1;
             animation: floatOrb 10s infinite alternate ease-in-out;
+            will-change: transform; /* Optimisation GPU */
         }
         .orb-1 { width: 400px; height: 400px; background: rgba(0, 229, 255, 0.15); top: -10%; left: -10%; }
         .orb-2 { width: 500px; height: 500px; background: rgba(0, 100, 255, 0.1); bottom: -20%; right: -10%; animation-delay: -5s; }
@@ -86,17 +87,18 @@
             justify-content: center;
             align-items: flex-start;
             opacity: 0;
-            transform: translateY(50px) scale(0.95) rotateX(5deg);
+            transform: translateY(50px) scale(0.95) rotateX(5deg) translateZ(0); /* translateZ(0) force l'accélération GPU */
             transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
             pointer-events: none;
             visibility: hidden;
             padding: 4rem;
             box-sizing: border-box;
+            will-change: transform, opacity; /* Prépare le navigateur aux changements */
         }
 
         .slide.active {
             opacity: 1;
-            transform: translateY(0) scale(1) rotateX(0);
+            transform: translateY(0) scale(1) rotateX(0) translateZ(0);
             pointer-events: auto;
             visibility: visible;
         }
@@ -335,12 +337,36 @@
         .slide-counter span { color: var(--primary); }
 
         /* =========================================
-           RESPONSIVE DESIGN (Mobiles & Tablettes)
+           RESPONSIVE DESIGN & OPTIMISATIONS MOBILES
            ========================================= */
         @media screen and (max-width: 850px) {
+            
+            /* --- Optimisations de Performance --- */
+            .orb { display: none !important; } /* Supprime les calculs GPU lourds */
+            
+            .grid-bg {
+                animation: none !important; /* Stoppe l'animation de fond */
+                opacity: 0.15; 
+            }
+            
+            .content-box {
+                /* Réduction drastique du Glassmorphism pour fluidifier le scroll */
+                backdrop-filter: blur(5px) !important; 
+                -webkit-backdrop-filter: blur(5px) !important;
+                background: rgba(15, 23, 42, 0.8) !important; 
+                padding: 1.5rem; 
+                border-radius: 16px;
+            }
+
+            .tiktok-glitch { 
+                animation-duration: 5s; /* Ralentit l'effet pour économiser le processeur */
+                font-size: 1.8rem; 
+                word-wrap: break-word; 
+                margin: 1rem 0; 
+            }
+
+            /* --- Adaptations Responsive et iOS Safe Area --- */
             .slide {
-                /* On augmente l'espace en bas (padding-bottom) pour que le contenu 
-                   ne se retrouve pas caché derrière les boutons et la barre du navigateur */
                 padding: 5rem 1.5rem calc(80px + env(safe-area-inset-bottom, 20px)) 1.5rem;
                 height: 100%;
                 justify-content: flex-start;
@@ -352,35 +378,24 @@
             h1 { font-size: 2.8rem; }
             h2 { font-size: 1.8rem; margin-bottom: 1.5rem; line-height: 1.2; }
             
-            .slide p, .slide span { 
-                font-size: 1rem !important; 
-                line-height: 1.5 !important; 
-            }
+            .slide p, .slide span { font-size: 1rem !important; line-height: 1.5 !important; }
             .slide h3 { font-size: 1.3rem !important; margin-bottom: 0.5rem; }
-            
-            .content-box { padding: 1.5rem; border-radius: 16px; }
             
             li { font-size: 1rem; padding-left: 30px; margin-bottom: 1rem; }
             li::before { font-size: 1.4rem; top: -2px; }
             
-            .tiktok-glitch { font-size: 1.8rem; word-wrap: break-word; margin: 1rem 0; }
             .image-container img { max-width: 100%; max-height: 30vh; }
             
-            /* GESTION DE LA NAVIGATION & BARRE D'ADRESSE MOBILE */
             .controls {
                 right: 50%;
                 transform: translateX(50%);
-                /* On intègre la marge de sécurité (safe-area) de l'iPhone */
                 bottom: calc(20px + env(safe-area-inset-bottom, 0px));
                 width: 90%;
                 justify-content: space-between;
                 gap: 10px;
             }
             
-            .progress-container {
-                /* On remonte la barre de progression au-dessus du trait de l'iPhone */
-                bottom: env(safe-area-inset-bottom, 0px);
-            }
+            .progress-container { bottom: env(safe-area-inset-bottom, 0px); }
 
             button {
                 padding: 12px 15px;
@@ -391,7 +406,6 @@
             
             .slide-counter {
                 bottom: auto;
-                /* Marge de sécurité en haut (encoche iPhone) */
                 top: calc(20px + env(safe-area-inset-top, 0px));
                 left: 20px;
                 font-size: 1rem;
@@ -403,6 +417,18 @@
             h2 { font-size: 1.5rem; }
             .tiktok-glitch { font-size: 1.5rem; }
             .badge { font-size: 0.75rem; padding: 4px 10px; }
+        }
+
+        /* =========================================
+           ACCESSIBILITÉ & BATTERIE (Préférences Utilisateur)
+           ========================================= */
+        @media (prefers-reduced-motion: reduce) {
+            *, ::before, ::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
         }
     </style>
 </head>
@@ -524,7 +550,6 @@
                 slide.classList.remove('active');
                 if (i === index) {
                     slide.classList.add('active');
-                    // Sur mobile, on s'assure qu'on remonte tout en haut du scroll de la diapo
                     if (window.innerWidth <= 850) {
                         slide.scrollTop = 0;
                     }
