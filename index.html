@@ -160,7 +160,6 @@
             transform-style: preserve-3d;
         }
 
-        /* Ligne décorative style "Vitesse" sur le côté de la box */
         .content-box::before {
             content: '';
             position: absolute;
@@ -175,10 +174,7 @@
             box-shadow: 20px 40px 70px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15);
         }
 
-        /* Apparition en cascade des listes (Staggering) */
-        ul {
-            list-style: none; padding: 0; margin: 0;
-        }
+        ul { list-style: none; padding: 0; margin: 0; }
 
         li {
             font-size: 1.3rem;
@@ -191,12 +187,10 @@
             transform: translateX(-30px);
         }
 
-        /* Délais d'apparition pour les éléments de la liste */
         .slide.active li:nth-child(1) { transition: all 0.5s ease 0.3s; opacity: 1; transform: translateX(0); }
         .slide.active li:nth-child(2) { transition: all 0.5s ease 0.5s; opacity: 1; transform: translateX(0); }
         .slide.active li:nth-child(3) { transition: all 0.5s ease 0.7s; opacity: 1; transform: translateX(0); }
 
-        /* Icône personnalisée pour les listes */
         li::before {
             content: "»";
             position: absolute;
@@ -209,9 +203,7 @@
             transition: transform 0.3s ease;
         }
 
-        li:hover::before {
-            transform: translateX(5px);
-        }
+        li:hover::before { transform: translateX(5px); }
 
         .highlight {
             color: #fff;
@@ -244,7 +236,6 @@
             transform: rotateY(-5deg) rotateX(5deg) scale(1.05);
         }
 
-        /* Effet TikTok pour le Hashtag */
         .tiktok-glitch {
             font-size: 3.5rem;
             font-weight: 900;
@@ -328,7 +319,6 @@
             100% { background-position: -100% 0; }
         }
 
-        /* Indicateur de numéro de slide */
         .slide-counter {
             position: fixed;
             bottom: 45px;
@@ -340,21 +330,98 @@
             z-index: 100;
         }
         .slide-counter span { color: var(--primary); }
+
+        /* =========================================
+           NOUVEAU : RESPONSIVE DESIGN (Mobiles & Tablettes)
+           ========================================= */
+        @media screen and (max-width: 850px) {
+            .slide {
+                padding: 5rem 1.5rem 6rem 1.5rem; /* Espace en haut pour le compteur, en bas pour les boutons */
+                height: 100%;
+                justify-content: flex-start;
+                overflow-y: auto; /* Permet de scroller si le contenu est trop grand */
+            }
+            
+            /* Masquer la barre de scroll pour l'esthétique sur mobile */
+            .slide::-webkit-scrollbar { display: none; }
+            
+            h1 { font-size: 2.8rem; }
+            h2 { font-size: 1.8rem; margin-bottom: 1.5rem; line-height: 1.2; }
+            
+            /* Surcharge forcée des styles en ligne (p, span, h3) pour mobile */
+            .slide p, .slide span { 
+                font-size: 1rem !important; 
+                line-height: 1.5 !important; 
+            }
+            .slide h3 { font-size: 1.3rem !important; margin-bottom: 0.5rem; }
+            
+            .content-box {
+                padding: 1.5rem;
+                border-radius: 16px;
+            }
+            
+            li {
+                font-size: 1rem;
+                padding-left: 30px;
+                margin-bottom: 1rem;
+            }
+            li::before { font-size: 1.4rem; top: -2px; }
+            
+            .tiktok-glitch { 
+                font-size: 1.8rem; 
+                word-wrap: break-word; /* Évite que le texte ne déborde */
+                margin: 1rem 0;
+            }
+            
+            .image-container img { 
+                max-width: 100%; 
+                max-height: 30vh; 
+            }
+            
+            /* Réorganisation de la navigation en bas, centrée */
+            .controls {
+                right: 50%;
+                transform: translateX(50%);
+                bottom: 20px;
+                width: 90%;
+                justify-content: space-between;
+                gap: 10px;
+            }
+            
+            button {
+                padding: 12px 15px;
+                font-size: 0.9rem;
+                flex: 1; /* Prend l'espace disponible */
+                justify-content: center;
+            }
+            
+            /* Compteur déplacé en haut à gauche pour dégager l'espace en bas */
+            .slide-counter {
+                bottom: auto;
+                top: 20px;
+                left: 20px;
+                font-size: 1rem;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            h1 { font-size: 2.2rem; }
+            h2 { font-size: 1.5rem; }
+            .tiktok-glitch { font-size: 1.5rem; }
+            .badge { font-size: 0.75rem; padding: 4px 10px; }
+        }
     </style>
 </head>
 <body>
 
-    <!-- Fond animé créatif -->
     <div class="grid-bg"></div>
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
 
-    <!-- Numéro de slide en bas à gauche -->
     <div class="slide-counter">0<span id="currentCounter">1</span> / 06</div>
 
     <div class="presentation-container" id="presentation">
         
-        <!-- Slide 1: Titre -->
         <div class="slide active">
             <div class="badge">Session de Recrutement</div>
             <h1>Audit <span>PermiFast</span></h1>
@@ -364,7 +431,6 @@
             </p>
         </div>
 
-        <!-- Slide 2: Points Forts -->
         <div class="slide">
             <div class="badge">01. Les Fondations</div>
             <h2>Ce qui fonctionne très bien</h2>
@@ -377,7 +443,6 @@
             </div>
         </div>
 
-        <!-- Slide 3: Axes d'amélioration 1 -->
         <div class="slide">
             <div class="badge">02. Les Opportunités</div>
             <h2>Axes de progression (1/2)</h2>
@@ -389,7 +454,6 @@
             </div>
         </div>
 
-        <!-- Slide 4: Axes d'amélioration 2 -->
         <div class="slide">
             <div class="badge">02. Les Opportunités</div>
             <h2>Axes de progression (2/2)</h2>
@@ -401,7 +465,6 @@
             </div>
         </div>
 
-        <!-- Slide 5: Proposition de Logo -->
         <div class="slide" style="align-items: center; text-align: center;">
             <div class="badge">03. Design System</div>
             <h2>Proposition d'évolution visuelle</h2>
@@ -409,12 +472,10 @@
                 Une piste d'exploration créative intégrant la notion de vitesse (compteur) et des typographies ancrées dans l'univers de la mobilité moderne.
             </p>
             <div class="image-container">
-                <!-- L'image locale s'affichera ici -->
                 <img src="PermisFast.png" alt="Propositions de logos PermiFast">
             </div>
         </div>
 
-        <!-- Slide 6: Plan d'action avec effet TikTok -->
         <div class="slide">
             <div class="badge" style="border-color: var(--tiktok-red); color: #fff; background: rgba(255,0,80,0.2);">04. Action Immédiate</div>
             <h2>Ma priorité de la Semaine 1</h2>
@@ -455,14 +516,11 @@
         const counter = document.getElementById('currentCounter');
 
         function updateUI() {
-            // Activer/Désactiver les boutons
             btnPrev.disabled = currentSlide === 0;
             btnNext.disabled = currentSlide === slides.length - 1;
             
-            // Mise à jour du compteur
             counter.innerText = currentSlide + 1;
 
-            // Mise à jour de la barre de progression
             const progress = ((currentSlide + 1) / slides.length) * 100;
             progressBar.style.width = progress + '%';
         }
@@ -472,6 +530,10 @@
                 slide.classList.remove('active');
                 if (i === index) {
                     slide.classList.add('active');
+                    // Sur mobile, remonter en haut de la slide au changement
+                    if (window.innerWidth <= 850) {
+                        slide.scrollTop = 0;
+                    }
                 }
             });
             updateUI();
@@ -491,16 +553,14 @@
             }
         }
 
-        // Navigation avec les flèches du clavier et la barre espace
         document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowRight' || e.key === ' ') {
-                if(e.key === ' ') e.preventDefault(); // Empêche le scroll de la page avec espace
+                if(e.key === ' ') e.preventDefault();
                 nextSlide();
             }
             if (e.key === 'ArrowLeft') prevSlide();
         });
 
-        // Initialisation
         updateUI();
     </script>
 </body>
