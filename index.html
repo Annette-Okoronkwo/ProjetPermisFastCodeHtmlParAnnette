@@ -2,10 +2,18 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Présentation PermiFast</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&display=swap');
+        
+        /* 
+           CORRECTIF 1 : La règle magique pour éviter les "boîtes grasses".
+           Le padding est désormais inclus dans les 100% de la largeur.
+        */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
         
         :root {
             --primary: #00E5FF;
@@ -24,16 +32,21 @@
             font-family: 'Outfit', sans-serif;
             background-color: var(--bg-dark);
             color: var(--text-light);
+            /* CORRECTIF 2 : Bloque l'effet élastique et le scroll global */
             overflow: hidden;
+            overscroll-behavior: none; 
             perspective: 1000px;
+            width: 100vw;
+            height: 100dvh;
+            position: fixed; /* Évite tout mouvement intempestif de la page sur iOS */
         }
 
         /* Arrière-plan "Autoroute Digitale" */
         .grid-bg {
             position: absolute;
-            top: 0; left: 0; width: 100vw; 
-            height: 100vh; /* Fallback */
-            height: 100dvh; /* S'adapte à la barre d'URL mobile */
+            top: 0; left: 0; 
+            width: 100vw; 
+            height: 100dvh; 
             background-image: 
                 linear-gradient(var(--glass-border) 1px, transparent 1px),
                 linear-gradient(90deg, var(--glass-border) 1px, transparent 1px);
@@ -57,7 +70,7 @@
             filter: blur(100px);
             z-index: -1;
             animation: floatOrb 10s infinite alternate ease-in-out;
-            will-change: transform; /* Optimisation GPU */
+            will-change: transform; 
         }
         .orb-1 { width: 400px; height: 400px; background: rgba(0, 229, 255, 0.15); top: -10%; left: -10%; }
         .orb-2 { width: 500px; height: 500px; background: rgba(0, 100, 255, 0.1); bottom: -20%; right: -10%; animation-delay: -5s; }
@@ -70,11 +83,11 @@
         .presentation-container {
             position: relative;
             width: 100vw;
-            height: 100vh; /* Fallback */
-            height: 100dvh; /* Hauteur dynamique */
+            height: 100dvh; 
             display: flex;
             justify-content: center;
             align-items: center;
+            overflow: hidden; /* Sécurité supplémentaire */
         }
 
         .slide {
@@ -87,13 +100,12 @@
             justify-content: center;
             align-items: flex-start;
             opacity: 0;
-            transform: translateY(50px) scale(0.95) rotateX(5deg) translateZ(0); /* translateZ(0) force l'accélération GPU */
+            transform: translateY(50px) scale(0.95) rotateX(5deg) translateZ(0); 
             transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
             pointer-events: none;
             visibility: hidden;
             padding: 4rem;
-            box-sizing: border-box;
-            will-change: transform, opacity; /* Prépare le navigateur aux changements */
+            will-change: transform, opacity; 
         }
 
         .slide.active {
@@ -179,7 +191,7 @@
             box-shadow: 20px 40px 70px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15);
         }
 
-        ul { list-style: none; padding: 0; margin: 0; }
+        ul { list-style: none; padding: 0; margin: 0; width: 100%; }
 
         li {
             font-size: 1.3rem;
@@ -337,46 +349,44 @@
         .slide-counter span { color: var(--primary); }
 
         /* =========================================
-           RESPONSIVE DESIGN & OPTIMISATIONS MOBILES
+           VERROUILLAGE RESPONSIVE & PERFORMANCES
            ========================================= */
         @media screen and (max-width: 850px) {
             
-            /* --- Optimisations de Performance --- */
-            .orb { display: none !important; } /* Supprime les calculs GPU lourds */
-            
-            .grid-bg {
-                animation: none !important; /* Stoppe l'animation de fond */
-                opacity: 0.15; 
-            }
+            .orb { display: none !important; }
+            .grid-bg { animation: none !important; opacity: 0.15; }
             
             .content-box {
-                /* Réduction drastique du Glassmorphism pour fluidifier le scroll */
                 backdrop-filter: blur(5px) !important; 
                 -webkit-backdrop-filter: blur(5px) !important;
                 background: rgba(15, 23, 42, 0.8) !important; 
                 padding: 1.5rem; 
                 border-radius: 16px;
+                width: 100%; /* S'assure de ne jamais dépasser 100% */
             }
 
             .tiktok-glitch { 
-                animation-duration: 5s; /* Ralentit l'effet pour économiser le processeur */
+                animation-duration: 5s; 
                 font-size: 1.8rem; 
                 word-wrap: break-word; 
                 margin: 1rem 0; 
             }
 
-            /* --- Adaptations Responsive et iOS Safe Area --- */
             .slide {
+                width: 100%; /* Au lieu de 90% pour un ancrage parfait */
                 padding: 5rem 1.5rem calc(80px + env(safe-area-inset-bottom, 20px)) 1.5rem;
-                height: 100%;
+                height: 100dvh;
                 justify-content: flex-start;
+                
+                /* CORRECTIF 3 : Bloque totalement le scroll horizontal */
+                overflow-x: hidden !important; 
                 overflow-y: auto; 
             }
             
             .slide::-webkit-scrollbar { display: none; }
             
             h1 { font-size: 2.8rem; }
-            h2 { font-size: 1.8rem; margin-bottom: 1.5rem; line-height: 1.2; }
+            h2 { font-size: 1.8rem; margin-bottom: 1.5rem; line-height: 1.2; word-wrap: break-word; }
             
             .slide p, .slide span { font-size: 1rem !important; line-height: 1.5 !important; }
             .slide h3 { font-size: 1.3rem !important; margin-bottom: 0.5rem; }
@@ -419,9 +429,6 @@
             .badge { font-size: 0.75rem; padding: 4px 10px; }
         }
 
-        /* =========================================
-           ACCESSIBILITÉ & BATTERIE (Préférences Utilisateur)
-           ========================================= */
         @media (prefers-reduced-motion: reduce) {
             *, ::before, ::after {
                 animation-duration: 0.01ms !important;
