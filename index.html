@@ -7,10 +7,7 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&display=swap');
         
-        /* 
-           CORRECTIF 1 : La règle magique pour éviter les "boîtes grasses".
-           Le padding est désormais inclus dans les 100% de la largeur.
-        */
+        /* Sécurité absolue contre les débordements */
         *, *::before, *::after {
             box-sizing: border-box;
         }
@@ -32,20 +29,18 @@
             font-family: 'Outfit', sans-serif;
             background-color: var(--bg-dark);
             color: var(--text-light);
-            /* CORRECTIF 2 : Bloque l'effet élastique et le scroll global */
-            overflow: hidden;
+            overflow: hidden; /* Empêche le fond de bouger */
             overscroll-behavior: none; 
             perspective: 1000px;
-            width: 100vw;
-            height: 100dvh;
-            position: fixed; /* Évite tout mouvement intempestif de la page sur iOS */
+            width: 100%;
+            height: 100dvh; /* S'adapte dynamiquement */
         }
 
-        /* Arrière-plan "Autoroute Digitale" */
+        /* Arrière-plan */
         .grid-bg {
             position: absolute;
             top: 0; left: 0; 
-            width: 100vw; 
+            width: 100%; 
             height: 100dvh; 
             background-image: 
                 linear-gradient(var(--glass-border) 1px, transparent 1px),
@@ -63,7 +58,7 @@
             100% { background-position: 0 50px; }
         }
 
-        /* Halos lumineux flottants */
+        /* Halos lumineux */
         .orb {
             position: absolute;
             border-radius: 50%;
@@ -82,12 +77,12 @@
 
         .presentation-container {
             position: relative;
-            width: 100vw;
+            width: 100%;
             height: 100dvh; 
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden; /* Sécurité supplémentaire */
+            overflow: hidden; 
         }
 
         .slide {
@@ -349,12 +344,32 @@
         .slide-counter span { color: var(--primary); }
 
         /* =========================================
-           VERROUILLAGE RESPONSIVE & PERFORMANCES
+           ULTRA-CORRECTIF iPHONE & RESPONSIVE
            ========================================= */
         @media screen and (max-width: 850px) {
             
             .orb { display: none !important; }
             .grid-bg { animation: none !important; opacity: 0.15; }
+            
+            .slide {
+                width: 100%; 
+                height: 100%; /* Force la slide à faire la hauteur totale */
+                
+                /* LE FIX iPHONE : On enlève le flexbox qui casse le scroll */
+                display: block; 
+                
+                overflow-x: hidden !important; 
+                overflow-y: auto !important; 
+                
+                /* Active le défilement "momentum" naturel d'Apple */
+                -webkit-overflow-scrolling: touch; 
+                
+                /* On augmente massivement le padding en bas (140px) 
+                   pour que le dernier texte passe AU-DESSUS des boutons fixes */
+                padding: 4.5rem 1.2rem calc(140px + env(safe-area-inset-bottom, 20px)) 1.2rem;
+            }
+            
+            .slide::-webkit-scrollbar { display: none; }
             
             .content-box {
                 backdrop-filter: blur(5px) !important; 
@@ -362,29 +377,21 @@
                 background: rgba(15, 23, 42, 0.8) !important; 
                 padding: 1.5rem; 
                 border-radius: 16px;
-                width: 100%; /* S'assure de ne jamais dépasser 100% */
+                width: 100%; 
+                
+                /* Force les mots trop longs à se casser pour ne pas élargir la boîte */
+                overflow-wrap: break-word; 
+                word-wrap: break-word;
             }
 
             .tiktok-glitch { 
                 animation-duration: 5s; 
-                font-size: 1.8rem; 
-                word-wrap: break-word; 
+                /* Taille dynamique : s'adapte à la largeur de l'écran, maximum 1.8rem */
+                font-size: clamp(1.2rem, 6vw, 1.8rem); 
+                word-break: break-all; /* Sécurité maximale anti-débordement */
                 margin: 1rem 0; 
             }
 
-            .slide {
-                width: 100%; /* Au lieu de 90% pour un ancrage parfait */
-                padding: 5rem 1.5rem calc(80px + env(safe-area-inset-bottom, 20px)) 1.5rem;
-                height: 100dvh;
-                justify-content: flex-start;
-                
-                /* CORRECTIF 3 : Bloque totalement le scroll horizontal */
-                overflow-x: hidden !important; 
-                overflow-y: auto; 
-            }
-            
-            .slide::-webkit-scrollbar { display: none; }
-            
             h1 { font-size: 2.8rem; }
             h2 { font-size: 1.8rem; margin-bottom: 1.5rem; line-height: 1.2; word-wrap: break-word; }
             
@@ -416,7 +423,7 @@
             
             .slide-counter {
                 bottom: auto;
-                top: calc(20px + env(safe-area-inset-top, 0px));
+                top: calc(15px + env(safe-area-inset-top, 0px));
                 left: 20px;
                 font-size: 1rem;
             }
@@ -425,7 +432,6 @@
         @media screen and (max-width: 480px) {
             h1 { font-size: 2.2rem; }
             h2 { font-size: 1.5rem; }
-            .tiktok-glitch { font-size: 1.5rem; }
             .badge { font-size: 0.75rem; padding: 4px 10px; }
         }
 
@@ -492,10 +498,10 @@
             </div>
         </div>
 
-        <div class="slide" style="align-items: center; text-align: center;">
+        <div class="slide" style="text-align: center;">
             <div class="badge">03. Design System</div>
             <h2>Proposition d'évolution visuelle</h2>
-            <p style="font-size: 1.2rem; color: var(--text-muted); max-width: 700px; margin-bottom: 1rem;">
+            <p style="font-size: 1.2rem; color: var(--text-muted); max-width: 700px; margin-bottom: 1rem; margin-left: auto; margin-right: auto;">
                 Une piste d'exploration créative intégrant la notion de vitesse (compteur) et des typographies ancrées dans l'univers de la mobilité moderne.
             </p>
             <div class="image-container">
@@ -557,8 +563,9 @@
                 slide.classList.remove('active');
                 if (i === index) {
                     slide.classList.add('active');
+                    // Reset scroll to top smoothly when changing slides
                     if (window.innerWidth <= 850) {
-                        slide.scrollTop = 0;
+                        slide.scrollTo({ top: 0, behavior: 'smooth' });
                     }
                 }
             });
