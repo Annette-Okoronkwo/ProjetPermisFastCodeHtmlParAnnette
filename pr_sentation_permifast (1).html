@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Présentation PermiFast</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&display=swap');
+        
+        :root {
+            --primary: #00E5FF;
+            --primary-glow: rgba(0, 229, 255, 0.6);
+            --tiktok-red: #ff0050;
+            --bg-dark: #050507;
+            --text-light: #f8fafc;
+            --text-muted: #94a3b8;
+            --glass-bg: rgba(15, 23, 42, 0.4);
+            --glass-border: rgba(0, 229, 255, 0.15);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            overflow: hidden;
+            perspective: 1000px;
+        }
+
+        /* Arrière-plan "Autoroute Digitale" */
+        .grid-bg {
+            position: absolute;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background-image: 
+                linear-gradient(var(--glass-border) 1px, transparent 1px),
+                linear-gradient(90deg, var(--glass-border) 1px, transparent 1px);
+            background-size: 50px 50px;
+            background-position: center bottom;
+            transform: perspective(500px) rotateX(60deg) translateY(100px) scale(3);
+            animation: moveGrid 15s linear infinite;
+            z-index: -2;
+            opacity: 0.3;
+        }
+
+        @keyframes moveGrid {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 50px; }
+        }
+
+        /* Halos lumineux flottants */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: -1;
+            animation: floatOrb 10s infinite alternate ease-in-out;
+        }
+        .orb-1 { width: 400px; height: 400px; background: rgba(0, 229, 255, 0.15); top: -10%; left: -10%; }
+        .orb-2 { width: 500px; height: 500px; background: rgba(0, 100, 255, 0.1); bottom: -20%; right: -10%; animation-delay: -5s; }
+
+        @keyframes floatOrb {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(50px, 50px) scale(1.2); }
+        }
+
+        .presentation-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slide {
+            position: absolute;
+            width: 90%;
+            max-width: 1200px;
+            height: 80%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            opacity: 0;
+            transform: translateY(50px) scale(0.95) rotateX(5deg);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+            visibility: hidden;
+            padding: 4rem;
+            box-sizing: border-box;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateY(0) scale(1) rotateX(0);
+            pointer-events: auto;
+            visibility: visible;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 16px;
+            background: rgba(0, 229, 255, 0.1);
+            border: 1px solid var(--primary);
+            border-radius: 50px;
+            color: var(--primary);
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        .slide.active .badge {
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.6s ease 0.2s;
+        }
+
+        h1 {
+            font-size: 5.5rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin: 0 0 1rem 0;
+            letter-spacing: -2px;
+        }
+
+        h1 span {
+            color: var(--primary);
+            text-shadow: 0 0 30px var(--primary-glow);
+            position: relative;
+        }
+
+        h2 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin: 0 0 2rem 0;
+            background: linear-gradient(to right, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+        }
+
+        .content-box {
+            background: var(--glass-bg);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 3rem;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 900px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            transform-style: preserve-3d;
+        }
+
+        /* Ligne décorative style "Vitesse" sur le côté de la box */
+        .content-box::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 6px; height: 100%;
+            background: linear-gradient(to bottom, var(--primary), transparent);
+            box-shadow: 0 0 20px var(--primary);
+        }
+
+        .content-box:hover {
+            transform: translateY(-10px) rotateX(2deg) rotateY(-2deg);
+            box-shadow: 20px 40px 70px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        }
+
+        /* Apparition en cascade des listes (Staggering) */
+        ul {
+            list-style: none; padding: 0; margin: 0;
+        }
+
+        li {
+            font-size: 1.3rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            padding-left: 50px;
+            position: relative;
+            color: #cbd5e1;
+            opacity: 0;
+            transform: translateX(-30px);
+        }
+
+        /* Délais d'apparition pour les éléments de la liste */
+        .slide.active li:nth-child(1) { transition: all 0.5s ease 0.3s; opacity: 1; transform: translateX(0); }
+        .slide.active li:nth-child(2) { transition: all 0.5s ease 0.5s; opacity: 1; transform: translateX(0); }
+        .slide.active li:nth-child(3) { transition: all 0.5s ease 0.7s; opacity: 1; transform: translateX(0); }
+
+        /* Icône personnalisée pour les listes */
+        li::before {
+            content: "»";
+            position: absolute;
+            left: 0;
+            top: -2px;
+            color: var(--primary);
+            font-size: 2rem;
+            font-weight: 900;
+            text-shadow: 0 0 10px var(--primary-glow);
+            transition: transform 0.3s ease;
+        }
+
+        li:hover::before {
+            transform: translateX(5px);
+        }
+
+        .highlight {
+            color: #fff;
+            font-weight: 700;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            margin-top: 1rem;
+            perspective: 1000px;
+        }
+
+        .image-container img {
+            max-width: 80%;
+            max-height: 45vh;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.5s ease;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        }
+
+        .image-container:hover img {
+            transform: rotateY(-5deg) rotateX(5deg) scale(1.05);
+        }
+
+        /* Effet TikTok pour le Hashtag */
+        .tiktok-glitch {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: -1px;
+            margin: 1.5rem 0;
+            text-shadow: 3px 0px 0px var(--primary), -3px 0px 0px var(--tiktok-red);
+            animation: glitchEffect 3s infinite;
+        }
+
+        @keyframes glitchEffect {
+            0%, 100% { text-shadow: 3px 0 0 var(--primary), -3px 0 0 var(--tiktok-red); }
+            48% { text-shadow: 3px 0 0 var(--primary), -3px 0 0 var(--tiktok-red); }
+            50% { text-shadow: -3px 0 0 var(--primary), 3px 0 0 var(--tiktok-red); transform: translateX(2px); }
+            52% { text-shadow: 3px 0 0 var(--primary), -3px 0 0 var(--tiktok-red); transform: translateX(0); }
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 40px;
+            right: 50px;
+            z-index: 100;
+            display: flex;
+            gap: 15px;
+        }
+
+        button {
+            background: rgba(0, 229, 255, 0.05);
+            border: 1px solid rgba(0, 229, 255, 0.3);
+            color: var(--text-light);
+            padding: 14px 28px;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: 'Outfit', sans-serif;
+            cursor: pointer;
+            border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        button:hover {
+            background: var(--primary);
+            color: var(--bg-dark);
+            box-shadow: 0 0 25px var(--primary-glow);
+            transform: translateY(-3px);
+            border-color: var(--primary);
+        }
+
+        button:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+            background: transparent;
+        }
+
+        .progress-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            z-index: 99;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #0055ff, var(--primary), #fff);
+            background-size: 200% 100%;
+            transition: width 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+            box-shadow: 0 0 15px var(--primary-glow);
+            animation: gradientMove 2s linear infinite;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 100% 0; }
+            100% { background-position: -100% 0; }
+        }
+
+        /* Indicateur de numéro de slide */
+        .slide-counter {
+            position: fixed;
+            bottom: 45px;
+            left: 50px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            letter-spacing: 2px;
+            z-index: 100;
+        }
+        .slide-counter span { color: var(--primary); }
+    </style>
+</head>
+<body>
+
+    <!-- Fond animé créatif -->
+    <div class="grid-bg"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <!-- Numéro de slide en bas à gauche -->
+    <div class="slide-counter">0<span id="currentCounter">1</span> / 06</div>
+
+    <div class="presentation-container" id="presentation">
+        
+        <!-- Slide 1: Titre -->
+        <div class="slide active">
+            <div class="badge">Session de Recrutement</div>
+            <h1>Audit <span>PermiFast</span></h1>
+            <h2>Analyse & Opportunités Stratégiques</h2>
+            <p style="font-size: 1.4rem; color: var(--text-muted); max-width: 600px; line-height: 1.6;">
+                Une vision moderne pour accélérer l'acquisition et fédérer la Génération Z.
+            </p>
+        </div>
+
+        <!-- Slide 2: Points Forts -->
+        <div class="slide">
+            <div class="badge">01. Les Fondations</div>
+            <h2>Ce qui fonctionne très bien</h2>
+            <div class="content-box">
+                <ul>
+                    <li><span class="highlight">Avis étudiants :</span> Un excellent gage de confiance et de réassurance. Les jeunes s'identifient immédiatement à leurs pairs.</li>
+                    <li><span class="highlight">Zéro papier (B2B & B2C) :</span> Gain de temps massif. Fini la "prise de tête" administrative pour les élèves et les auto-écoles.</li>
+                    <li><span class="highlight">Présence sociale :</span> Une régularité exemplaire sur les réseaux qui démontre le dynamisme et la transparence de la marque.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 3: Axes d'amélioration 1 -->
+        <div class="slide">
+            <div class="badge">02. Les Opportunités</div>
+            <h2>Axes de progression (1/2)</h2>
+            <div class="content-box">
+                <ul>
+                    <li><span class="highlight">Optimisation de l'UX :</span> Rendre le parcours sur la plateforme encore plus fluide et intuitif pour coller à 100 % à la promesse "Fast".</li>
+                    <li><span class="highlight">Authenticité des contenus :</span> Diminuer l'usage visible de l'IA dans les pubs TikTok. La Génération Z exige du "vrai" et de l'organique pour accorder sa confiance.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 4: Axes d'amélioration 2 -->
+        <div class="slide">
+            <div class="badge">02. Les Opportunités</div>
+            <h2>Axes de progression (2/2)</h2>
+            <div class="content-box">
+                <ul>
+                    <li><span class="highlight">Intégration aux "Trends" :</span> Surfer sur la culture Web pour montrer que le permis avec PermiFast, c'est "cool et easy", tout en gardant le sérieux de la formation.</li>
+                    <li><span class="highlight">Identité Visuelle :</span> Le logo actuel pourrait évoquer davantage la mobilité. Une évolution colorimétrique et typographique donnerait plus d'impact.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 5: Proposition de Logo -->
+        <div class="slide" style="align-items: center; text-align: center;">
+            <div class="badge">03. Design System</div>
+            <h2>Proposition d'évolution visuelle</h2>
+            <p style="font-size: 1.2rem; color: var(--text-muted); max-width: 700px; margin-bottom: 1rem;">
+                Une piste d'exploration créative intégrant la notion de vitesse (compteur) et des typographies ancrées dans l'univers de la mobilité moderne.
+            </p>
+            <div class="image-container">
+                <!-- L'image locale s'affichera ici -->
+                <img src="PermisFast.png" alt="Propositions de logos PermiFast">
+            </div>
+        </div>
+
+        <!-- Slide 6: Plan d'action avec effet TikTok -->
+        <div class="slide">
+            <div class="badge" style="border-color: var(--tiktok-red); color: #fff; background: rgba(255,0,80,0.2);">04. Action Immédiate</div>
+            <h2>Ma priorité de la Semaine 1</h2>
+            <div class="content-box" style="border-left-color: var(--tiktok-red);">
+                <h3 style="font-size: 1.8rem; margin-top: 0;">Le lancement d'un concept participatif</h3>
+                
+                <div class="tiktok-glitch">#LePermisCestPasDeLeau</div>
+                
+                <p style="font-size: 1.3rem; line-height: 1.6; color: #e2e8f0; margin-bottom: 1.5rem;">
+                    Dès mon arrivée, je mettrais en place ce hashtag fédérateur. L'humour est le levier de conversion le plus puissant sur TikTok pour la Gen Z. Dédramatiser l'examen par le rire permet de transformer une simple audience en une <strong>véritable communauté soudée</strong>.
+                </p>
+                
+                <div style="background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
+                    <p style="font-size: 1.25rem; margin: 0; color: #fff;">
+                        Il faut que PermiFast soit la référence des jeunes, la première chose à laquelle ils pensent quand ils pensent au permis ! Et rien de mieux que l'humour pour conquérir leur cœur... <br><br>
+                        <span style="color: var(--primary); font-weight: 800; font-size: 1.5rem;">Vous ne pensez pas ?</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="controls">
+        <button id="btnPrev" onclick="prevSlide()">← Précédent</button>
+        <button id="btnNext" onclick="nextSlide()">Suivant →</button>
+    </div>
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar" style="width: 16.66%;"></div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progressBar');
+        const btnPrev = document.getElementById('btnPrev');
+        const btnNext = document.getElementById('btnNext');
+        const counter = document.getElementById('currentCounter');
+
+        function updateUI() {
+            // Activer/Désactiver les boutons
+            btnPrev.disabled = currentSlide === 0;
+            btnNext.disabled = currentSlide === slides.length - 1;
+            
+            // Mise à jour du compteur
+            counter.innerText = currentSlide + 1;
+
+            // Mise à jour de la barre de progression
+            const progress = ((currentSlide + 1) / slides.length) * 100;
+            progressBar.style.width = progress + '%';
+        }
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+                if (i === index) {
+                    slide.classList.add('active');
+                }
+            });
+            updateUI();
+        }
+
+        function nextSlide() {
+            if (currentSlide < slides.length - 1) {
+                currentSlide++;
+                showSlide(currentSlide);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                showSlide(currentSlide);
+            }
+        }
+
+        // Navigation avec les flèches du clavier et la barre espace
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                if(e.key === ' ') e.preventDefault(); // Empêche le scroll de la page avec espace
+                nextSlide();
+            }
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+
+        // Initialisation
+        updateUI();
+    </script>
+</body>
+</html>
