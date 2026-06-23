@@ -12,15 +12,15 @@
         }
         
         :root {
-            /* Palette Pastel */
-            --primary: #9BA4B5; /* Bleu/Gris pastel très doux */
-            --primary-glow: rgba(155, 164, 181, 0.4);
-            --tiktok-red: #FFB3BA; /* Rose pastel doux */
-            --bg-main: #FDFBF7; /* Crème très clair */
-            --text-main: #393E46; /* Gris anthracite pour la lisibilité */
-            --text-muted: #7A869A; /* Gris bleuté doux */
+            /* Palette Pastel Rosé */
+            --primary: #C98CA7; /* Rose pastel soutenu */
+            --primary-glow: rgba(201, 140, 167, 0.4);
+            --tiktok-red: #FFA6B6; /* Rose pêche doux */
+            --bg-main: #FFF7F8; /* Blanc cassé très légèrement rosé */
+            --text-main: #4A3F42; /* Gris anthracite chaud pour la lisibilité */
+            --text-muted: #937A80; /* Gris rosé doux */
             --glass-bg: rgba(255, 255, 255, 0.7);
-            --glass-border: rgba(155, 164, 181, 0.3);
+            --glass-border: rgba(201, 140, 167, 0.3);
         }
 
         body {
@@ -29,7 +29,6 @@
             font-family: 'Outfit', sans-serif;
             background-color: var(--bg-main);
             color: var(--text-main);
-            /* Ancrage fixe pour éviter les rebonds sur iPhone */
             position: fixed;
             inset: 0; 
             overflow: hidden; 
@@ -66,8 +65,8 @@
             animation: floatOrb 10s infinite alternate ease-in-out;
             will-change: transform; 
         }
-        .orb-1 { width: 400px; height: 400px; background: rgba(186, 225, 255, 0.6); top: -10%; left: -10%; } /* Bleu pastel */
-        .orb-2 { width: 500px; height: 500px; background: rgba(255, 179, 186, 0.5); bottom: -20%; right: -10%; animation-delay: -5s; } /* Rose pastel */
+        .orb-1 { width: 400px; height: 400px; background: rgba(255, 204, 229, 0.6); top: -10%; left: -10%; } /* Rose clair */
+        .orb-2 { width: 500px; height: 500px; background: rgba(255, 228, 225, 0.6); bottom: -20%; right: -10%; animation-delay: -5s; } /* Rose poudré (Misty Rose) */
 
         @keyframes floatOrb {
             0% { transform: translate(0, 0) scale(1); }
@@ -110,10 +109,10 @@
         .badge {
             display: inline-block;
             padding: 6px 16px;
-            background: rgba(155, 164, 181, 0.15);
+            background: rgba(201, 140, 167, 0.15);
             border: 1px solid var(--primary);
             border-radius: 50px;
-            color: #5c6b89;
+            color: #A36B81;
             font-size: 0.9rem;
             font-weight: 600;
             letter-spacing: 2px;
@@ -130,8 +129,8 @@
         }
 
         h1 { font-size: 5.5rem; font-weight: 900; line-height: 1.1; margin: 0 0 1rem 0; letter-spacing: -2px; color: var(--text-main); }
-        h1 span { color: #8294C4; text-shadow: 0 0 20px rgba(130, 148, 196, 0.3); position: relative; }
-        h2 { font-size: 3.5rem; font-weight: 800; margin: 0 0 2rem 0; background: linear-gradient(to right, #393E46, #7A869A); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -1px; }
+        h1 span { color: var(--primary); text-shadow: 0 0 20px var(--primary-glow); position: relative; }
+        h2 { font-size: 3.5rem; font-weight: 800; margin: 0 0 2rem 0; background: linear-gradient(to right, #4A3F42, #A07882); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -1px; }
 
         .content-box {
             background: var(--glass-bg);
@@ -149,42 +148,43 @@
             transform-style: preserve-3d;
         }
 
-        .content-box::before { content: ''; position: absolute; top: 0; left: 0; width: 6px; height: 100%; background: linear-gradient(to bottom, #8294C4, transparent); box-shadow: 0 0 15px rgba(130, 148, 196, 0.4); }
+        .content-box::before { content: ''; position: absolute; top: 0; left: 0; width: 6px; height: 100%; background: linear-gradient(to bottom, var(--primary), transparent); box-shadow: 0 0 15px var(--primary-glow); }
         .content-box:hover { transform: translateY(-10px) rotateX(2deg) rotateY(-2deg); box-shadow: 15px 30px 50px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 1); }
 
         ul { list-style: none; padding: 0; margin: 0; width: 100%; }
-        li { font-size: 1.3rem; line-height: 1.6; margin-bottom: 1.5rem; padding-left: 50px; position: relative; color: #555B6E; opacity: 0; transform: translateX(-30px); }
+        li { font-size: 1.3rem; line-height: 1.6; margin-bottom: 1.5rem; padding-left: 50px; position: relative; color: #69595E; opacity: 0; transform: translateX(-30px); }
         .slide.active li:nth-child(1) { transition: all 0.5s ease 0.3s; opacity: 1; transform: translateX(0); }
         .slide.active li:nth-child(2) { transition: all 0.5s ease 0.5s; opacity: 1; transform: translateX(0); }
         .slide.active li:nth-child(3) { transition: all 0.5s ease 0.7s; opacity: 1; transform: translateX(0); }
-        li::before { content: "»"; position: absolute; left: 0; top: -2px; color: #8294C4; font-size: 2rem; font-weight: 900; transition: transform 0.3s ease; }
+        li::before { content: "»"; position: absolute; left: 0; top: -2px; color: var(--primary); font-size: 2rem; font-weight: 900; transition: transform 0.3s ease; }
         li:hover::before { transform: translateX(5px); }
 
-        .highlight { color: #2C363F; font-weight: 700; border-bottom: 3px solid rgba(130, 148, 196, 0.4); }
+        .highlight { color: #3A2F32; font-weight: 700; border-bottom: 3px solid rgba(201, 140, 167, 0.4); }
 
         .image-container { display: flex; justify-content: center; align-items: center; width: 100%; margin-top: 1rem; perspective: 1000px; }
         .image-container img { max-width: 80%; max-height: 40vh; border-radius: 20px; background: rgba(255,255,255,0.6); padding: 15px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.8); transition: transform 0.5s ease; box-shadow: 0 15px 35px rgba(0,0,0,0.06); }
         .image-container:hover img { transform: rotateY(-5deg) rotateX(5deg) scale(1.05); }
 
-        .tiktok-glitch { font-size: 3.5rem; font-weight: 900; color: #393E46; letter-spacing: -1px; margin: 1.5rem 0; text-shadow: 2px 0px 0px var(--primary), -2px 0px 0px var(--tiktok-red); animation: glitchEffect 4s infinite; }
+        .tiktok-glitch { font-size: 3.5rem; font-weight: 900; color: #4A3F42; letter-spacing: -1px; margin: 1.5rem 0; text-shadow: 2px 0px 0px var(--primary), -2px 0px 0px var(--tiktok-red); animation: glitchEffect 4s infinite; }
         @keyframes glitchEffect { 0%, 100% { text-shadow: 2px 0 0 var(--primary), -2px 0 0 var(--tiktok-red); } 48% { text-shadow: 2px 0 0 var(--primary), -2px 0 0 var(--tiktok-red); } 50% { text-shadow: -2px 0 0 var(--primary), 2px 0 0 var(--tiktok-red); transform: translateX(1px); } 52% { text-shadow: 2px 0 0 var(--primary), -2px 0 0 var(--tiktok-red); transform: translateX(0); } }
 
-        .action-text { font-size: 1.3rem; line-height: 1.6; color: #555B6E; margin-bottom: 1.5rem; }
+        .action-text { font-size: 1.3rem; line-height: 1.6; color: #69595E; margin-bottom: 1.5rem; }
         .quote-box { background: rgba(255,255,255,0.6); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.8); box-shadow: 0 10px 20px rgba(0,0,0,0.03); }
-        .quote-box p { font-size: 1.25rem; margin: 0; color: #4A4E69; line-height: 1.5; }
-        .quote-box span { color: #8294C4; font-weight: 800; font-size: 1.5rem; display: block; margin-top: 10px; }
+        .quote-box p { font-size: 1.25rem; margin: 0; color: #5B4A50; line-height: 1.5; }
+        .quote-box span { color: var(--primary); font-weight: 800; font-size: 1.5rem; display: block; margin-top: 10px; }
 
         .controls { position: fixed; bottom: 40px; right: 50px; z-index: 100; display: flex; gap: 15px; }
-        button { background: rgba(255, 255, 255, 0.8); border: 1px solid rgba(155, 164, 181, 0.4); color: var(--text-main); padding: 14px 28px; font-size: 1rem; font-weight: 600; font-family: 'Outfit', sans-serif; cursor: pointer; border-radius: 12px; transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1); backdrop-filter: blur(10px); display: flex; align-items: center; gap: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        button:hover { background: #8294C4; color: #fff; box-shadow: 0 10px 20px rgba(130, 148, 196, 0.3); transform: translateY(-3px); border-color: #8294C4; }
+        button { background: rgba(255, 255, 255, 0.8); border: 1px solid var(--glass-border); color: var(--text-main); padding: 14px 28px; font-size: 1rem; font-weight: 600; font-family: 'Outfit', sans-serif; cursor: pointer; border-radius: 12px; transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1); backdrop-filter: blur(10px); display: flex; align-items: center; gap: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        button:hover { background: var(--primary); color: #fff; box-shadow: 0 10px 20px var(--primary-glow); transform: translateY(-3px); border-color: var(--primary); }
         button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; background: rgba(255, 255, 255, 0.5); border-color: transparent; }
 
         .progress-container { position: fixed; bottom: 0; left: 0; width: 100%; height: 6px; background: rgba(0, 0, 0, 0.05); z-index: 99; }
-        .progress-bar { height: 100%; background: linear-gradient(90deg, #FFB3BA, #BAE1FF, #B9FBC0); background-size: 200% 100%; transition: width 0.5s cubic-bezier(0.25, 1, 0.5, 1); animation: gradientMove 3s linear infinite; }
+        /* Nouveau dégradé rosé / pêche pastel pour la barre de progression */
+        .progress-bar { height: 100%; background: linear-gradient(90deg, #FFA6B6, #FFD1DC, #FFE4E1); background-size: 200% 100%; transition: width 0.5s cubic-bezier(0.25, 1, 0.5, 1); animation: gradientMove 3s linear infinite; }
         @keyframes gradientMove { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
 
         .slide-counter { position: fixed; bottom: 45px; left: 50px; font-size: 1.2rem; font-weight: 700; color: var(--text-muted); letter-spacing: 2px; z-index: 100; }
-        .slide-counter span { color: #8294C4; }
+        .slide-counter span { color: var(--primary); }
 
         /* =========================================
            LE FIX ANTI-BUG SAFARI IPHONE
@@ -349,9 +349,9 @@
         </div>
 
         <div class="slide">
-            <div class="badge" style="border-color: #FFB3BA; color: #D66D75; background: rgba(255, 179, 186, 0.2);">04. Action Immédiate</div>
+            <div class="badge" style="border-color: #FFA6B6; color: #C27083; background: rgba(255, 166, 182, 0.2);">04. Action Immédiate</div>
             <h2>Ma priorité de la Semaine 1</h2>
-            <div class="content-box" style="border-left-color: #FFB3BA;">
+            <div class="content-box" style="border-left-color: #FFA6B6;">
                 <h3 style="font-size: 1.8rem; margin-top: 0;">Le lancement d'un concept participatif</h3>
                 
                 <div class="tiktok-glitch">#LePermisCestPasDeLeau</div>
